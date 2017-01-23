@@ -18,10 +18,6 @@ app.use(cookieParser());
 
 app.use('/weather/v1', WeatherRoutesV1);
 
-interface Error {
-    status?: number;
-}
-
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -41,7 +37,8 @@ app.use(function(err, req, res, next) {
   res.send({error: {
     code: 1,
     title: 'Error',
-    decription: 'An error occurred'
+    decription: 'An error occurred',
+    obj: err
   }});
 });
 

@@ -28,7 +28,8 @@ app.use(function (err, req, res, next) {
     res.send({ error: {
             code: 1,
             title: 'Error',
-            decription: 'An error occurred'
+            decription: 'An error occurred',
+            obj: err
         } });
 });
 module.exports = app;
