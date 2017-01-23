@@ -1,13 +1,13 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
+import * as express from 'express';
+import * as path from 'path';
+import * as favicon from 'serve-favicon';
+import * as logger from 'morgan';
+import * as cookieParser from 'cookie-parser';
+import * as bodyParser from 'body-parser';
 
-var weatherRoutesV1 = require('./routes/weather-v1');
+import { WeatherRoutesV1 } from './routes/weather-v1';
 
-var app = express();
+var app: express.Application = express();
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -16,12 +16,17 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-app.use('/weather/v1', weatherRoutesV1);
+app.use('/weather/v1', WeatherRoutesV1);
+
+interface Error {
+    status?: number;
+}
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
-  err.status = 404;
+  err['status'] = 404;
   next(err);
 });
 

@@ -1,5 +1,6 @@
-var express = require('express');
-var router = express.Router();
+import { Router, Request, Response } from 'express';
+
+var router: Router = Router();
 
 /* Weather API v1 */
 
@@ -12,4 +13,4 @@ router.get('/:postcode', function(req, res, next) {
   });
 });
 
-module.exports = router;
+export const WeatherRoutesV1: Router = router;
