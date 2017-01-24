@@ -8,7 +8,7 @@ var router = express_1.Router();
  */
 router.get('/:postcode', function (req, res, next) {
     var llf = new LatLongFinder_1.LatLongFinder();
-    llf.search();
+    llf.searchMetOfficeLocations();
     res.send({
         forecast: 'Some JSON here'
     });

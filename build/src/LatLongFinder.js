@@ -4,13 +4,10 @@ var MetOfficeQuerier_1 = require("./MetOfficeQuerier");
 // TODO: Import LinkedList?
 var LatLongFinder = (function () {
     function LatLongFinder() {
-        var _this = this;
-        this.search = function () {
-            _this.mq.requestMetLocations();
-        };
-    }
-    LatLongFinder.prototype.LatLongSearcher = function () {
         this.mq = new MetOfficeQuerier_1.MetOfficeQuerier();
+        this.metLocations = this.mq.requestMetLocations();
+    }
+    LatLongFinder.prototype.searchMetOfficeLocations = function () {
     };
     return LatLongFinder;
 }());

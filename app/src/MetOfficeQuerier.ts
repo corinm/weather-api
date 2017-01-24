@@ -1,56 +1,38 @@
-import { get } from 'https';
+import * as request from 'request';
 
 export class MetOfficeQuerier {
 
-    private metHost: string = 'datapoint.metoffice.gov.uk';
-    private pathMetLocations: string;
-
-    // private urlMetWeather1: string = "http://datapoint.metoffice.gov.uk/public/data/val/wxfcs/all/json/";
-    // private urlMetWeather2: string = "?res=3hourly&key=";
+    private metKey: string;
+    private metOfficeLocations: Object[];
 
     constructor() {
-        let metKey = process.env.MET_KEY;
-        this.pathMetLocations = `/public/data/val/wxfcs/all/json/sitelist?key=${metKey}`;
+        this.metKey = process.env.MET_KEY;
+        this.requestMetLocations();
     }
 
-    public requestMetLocations = () => {
+    /**
+     * Obtains all Met Office weather station locations from Met Office API
+     * Stores them in metOfficeLocations
+     */
+    private requestMetLocations = () => {
 
-        let options = {
-            host: 'datapoint.metoffice.gov.uk',
-            path: this.pathMetLocations,
-            method: 'GET'
+        const options = {
+            uri: 'http://datapoint.metoffice.gov.uk/public/data/val/wxfcs/all/json/sitelist',
+            qs: {
+                key: this.metKey
+            },
+            json: true
         };
 
-        get(options, (response) => {
-            var body: string = '';
-            response.on('data', function(d) {
-                body += d;
-            });
-            response.on('end', function() {
-
-                // Data reception is done, do whatever with it!
-                var parsed = JSON.parse(body);
-                console.log(body);
-                return '';
-            });
+        request.get(options, (error, response, body) => {
+            if (error) {
+                console.error(error);
+            } else if (response.statusCode == 200) {
+                console.log(`${body.Locations.Location.length} locations retrieved`);
+                this.metOfficeLocations = body.Locations.Location;
+            }
         });
-    }
 
-    // public String requestWeatherData(Location location) {
+    };
 
-    //     //System.out.println();
-    //     //System.out.println(">> OBTAINING WEATHER DATA");
-
-    //     String tempUrl = urlMetWeather1 + location.getMetId() + urlMetWeather2 + metKey;
-    //     String response = null;
-
-    //     try {
-    //         response = hc.sendGet(tempUrl);
-
-    //     } catch (IOException e) {
-    //         e.printStackTrace();
-    //     }
-    //     return response;
-    // }
-
-}
+};

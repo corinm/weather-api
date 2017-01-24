@@ -1,6 +1,8 @@
 import { Router, Request, Response } from 'express';
 import { LatLongFinder } from '../src/LatLongFinder';
 
+import * as Rx from 'rxjs/Rx';
+
 var router: Router = Router();
 
 /* Weather API v1 */
@@ -11,7 +13,7 @@ var router: Router = Router();
 router.get('/:postcode', function(req, res, next) {
 
   let llf: LatLongFinder = new LatLongFinder();
-  // llf.search();
+  llf.searchMetOfficeLocations();
 
   res.send({
       forecast: 'Some JSON here'

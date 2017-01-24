@@ -1,4 +1,5 @@
 import { MetOfficeQuerier } from './MetOfficeQuerier';
+import { Observable } from 'rxjs';
 
 // TODO: Import KDTree
 // TODO: Import LinkedList?
@@ -6,15 +7,14 @@ import { MetOfficeQuerier } from './MetOfficeQuerier';
 export class LatLongFinder {
 
     private mq: MetOfficeQuerier;
+    private metLocations: any;
 
-    LatLongSearcher() {
-
+    constructor() {
         this.mq = new MetOfficeQuerier();
-
     }
 
-    public search = () => {
-        this.mq.requestMetLocations();
+    public searchMetOfficeLocations() {
+
     }
 
 }
