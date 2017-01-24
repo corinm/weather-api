@@ -1,11 +1,14 @@
 "use strict";
 var request = require("request");
+var Location_1 = require("./Location");
 var MetOfficeQuerier = (function () {
-    // private urlMetWeather1: string = "http://datapoint.metoffice.gov.uk/public/data/val/wxfcs/all/json/";
-    // private urlMetWeather2: string = "?res=3hourly&key=";
     function MetOfficeQuerier() {
         var _this = this;
-        this.requestMetLocations = function () {
+        this.metOfficeLocations = [];
+        /**
+         * Return an Observable of all Met Office weather station locations from Met Office API
+         */
+        this.requestMetLocations = function (callback) {
             var options = {
                 uri: 'http://datapoint.metoffice.gov.uk/public/data/val/wxfcs/all/json/sitelist',
                 qs: {
@@ -13,13 +16,16 @@ var MetOfficeQuerier = (function () {
                 },
                 json: true
             };
-            request.get(options, function (error, response, body) {
-                if (error) {
-                    console.error(error);
+            return request.get(options, function (error, response, body) {
+                if (error || response.statusCode != 200) {
+                    console.error(error || "Error in MetOfficeQuerier.requestMetLocations()");
+                    return [];
                 }
-                else if (response.statusCode == 200) {
+                else {
                     console.log(body.Locations.Location.length + " locations retrieved");
-                    return body.Locations.Location;
+                    var rawLocations = body.Locations.Location;
+                    var locations = rawLocations.map(function (location) { return new Location_1.Location(location['id'], location['name'], location['unitaryAuthArea'], location['latitude'], location['longitude']); });
+                    callback(locations);
                 }
             });
         };
@@ -28,3 +34,4 @@ var MetOfficeQuerier = (function () {
     return MetOfficeQuerier;
 }());
 exports.MetOfficeQuerier = MetOfficeQuerier;
+;

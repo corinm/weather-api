@@ -12,6 +12,7 @@
     "dotenv": "^4.0.0",
     "express": "~4.14.0",
     "jade": "~1.11.0",
+    "kdt": "^0.1.0",
     "morgan": "~1.7.0",
     "request": "^2.79.0",
     "rx-http-request": "^1.2.0",
