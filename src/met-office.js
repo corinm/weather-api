@@ -1,4 +1,6 @@
+const Promise = require('promise');
 const rp = require('request-promise');
+const Location = require('./location').Location;
 
 class MetOffice {
 
@@ -14,26 +16,50 @@ class MetOffice {
 
   getWeather(postcode, apiKey) {
 
-    const metLocations = this.getMetOfficeLocations();
+    const metLocations = this.getMetOfficeLocations()
+      .done(
+        (onFulfilled) => {
+          console.log("Success");
+          this.createTree();
+        },
+        (onRejected) => {
+          console.log("Failed");
+        }
+      );
 
   };
 
   /*
-   * Returns array of Met Office weather locations
+   * Returns Promise of an array of Met Office weather locations
    */
   getMetOfficeLocations() {
     
     console.log("HERE");
 
-    // rp(this.optionsLocationRequest)
-    //   .then((data) => {
-    //     console.log(data);
-    //   })
-    //   .catch((error) => {
-    //     console.error(error);
-    //   })
+    return rp(this.optionsLocationRequest)
 
-  }
+      // Convert raw Met Office locations into Location objects
+      .then((data) => {
+        let locations = data.Locations.Location
+          .map(rawLocation => new Location(rawLocation.id,
+                                           rawLocation.name,
+                                           rawLocation.unitaryAuthArea,
+                                           rawLocation.latitude,
+                                           rawLocation.longitude)
+          );
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+
+  };
+
+  /*
+   * Accepts a list of Location objects, returns a K-Dimensional Tree
+   */
+  createTree() {
+
+  };
 
 }
 
