@@ -14,6 +14,15 @@ class MetOffice {
       },
       json: true
     };
+
+    this._optionsLatLongFromPostcode = {
+      uri: 'https://api.postcodes.io/postcodes',
+      qs: {
+        q: ''
+      },
+      json: true
+    }
+
     // Blank array of Met Office locations
     this._metLocations = [];
   };
@@ -22,19 +31,27 @@ class MetOffice {
 
     this.getMetOfficeLocations() // A promise
       .then((locations) => this.createTree(locations))
-      .then(
+      .then((tree) => {
         // Get nearest location from tree
-      )
-      .then(
-        // Get weather forecast for nearest location
-      )
-      .then(
-        // Format weather forecast
-      )
-      .then(
-        // Return it via res as JSON
-      )
+        this.getMyLatLong(postcode) // A promise
+          .then((userLatLong) => {
 
+            // TODO: Search using KDTree
+
+            let a = tree.find(userLatLong);
+            console.log(a);
+          })
+          .then(
+           // Get weather forecast for nearest location
+
+          )
+          .then(
+            // Format weather forecast
+          )
+          .then(
+            // Return it via res as JSON
+          )
+      })
   };
 
   /*
@@ -59,8 +76,8 @@ class MetOffice {
           // Convert into GeoTree object where data is Location object
           .map(location => {
             return {
-              lat: location.latitude,
-              lng: location.longitude,
+              lat: parseInt(location.latitude),
+              lng: parseInt(location.longitude),
               data: location
             }
           });
@@ -77,7 +94,27 @@ class MetOffice {
   createTree(locations) {
     var geoTree = new GeoTree();
     geoTree.insert(locations);
-    console.log(geoTree);
+    return geoTree;
+  };
+
+  /*
+   * Accepts a postcode, returns lat and long as an object
+   */
+  getMyLatLong(postcode) {
+    let options = this._optionsLatLongFromPostcode;
+    options.qs.q = postcode;
+    return rp(options)
+      .then((response) => {
+        return response.result[0];
+      })
+      .then((location) => {
+        let a = {
+          lat: parseInt(location.latitude),
+          lng: parseInt(location.longitude)
+        }
+        // console.log(a);
+        return a;
+      });
   };
 
 }

@@ -4,10 +4,10 @@ class WeatherAPI {
 
     constructor() {};
 
-    getWeather() {
+    getWeather(postcode) {
 
         const mo = new MetOffice();
-        mo.getWeather('POSTCODE', 'APIKEY');
+        mo.getWeather(postcode, 'APIKEY');
 
     }
 

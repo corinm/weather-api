@@ -10,8 +10,10 @@ var router = express.Router();
  */
 router.get('/:postcode', function (req, res, next) {
 
+    let postcode = 'L2 3PS';
+
     const wa = new WeatherAPI();
-    wa.getWeather();
+    wa.getWeather(postcode);
 
     res.send({
         forecast: 'Some JSON here'
