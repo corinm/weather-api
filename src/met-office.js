@@ -30,28 +30,33 @@ class MetOffice {
   getWeather(postcode, apiKey) {
 
     this.getMetOfficeLocations() // A promise
-      .then((locations) => this.createTree(locations))
-      .then((tree) => {
-        // Get nearest location from tree
-        this.getMyLatLong(postcode) // A promise
-          .then((userLatLong) => {
+      .then((locations) => {
+        console.log(JSON.stringify(locations));
+      });
 
-            // TODO: Search using KDTree
 
-            let a = tree.find(userLatLong);
-            console.log(a);
-          })
-          .then(
-           // Get weather forecast for nearest location
+      // .then((locations) => this.createTree(locations))
+      // .then((tree) => {
+      //   // Get nearest location from tree
+      //   this.getMyLatLong(postcode) // A promise
+      //     .then((userLatLong) => {
 
-          )
-          .then(
-            // Format weather forecast
-          )
-          .then(
-            // Return it via res as JSON
-          )
-      })
+      //       // TODO: Search using KDTree
+
+      //       let a = tree.find(userLatLong);
+      //       console.log(a);
+      //     })
+      //     .then(
+      //      // Get weather forecast for nearest location
+
+      //     )
+      //     .then(
+      //       // Format weather forecast
+      //     )
+      //     .then(
+      //       // Return it via res as JSON
+      //     )
+      // })
   };
 
   /*
@@ -65,20 +70,16 @@ class MetOffice {
       .then((data) => {
         return data.Locations.Location
 
-          // Convert into Location objects
-          .map(rawLocation => new Location(rawLocation.id,
-                                           rawLocation.name,
-                                           rawLocation.unitaryAuthArea,
-                                           rawLocation.latitude,
-                                           rawLocation.longitude)
-          )
-
           // Convert into GeoTree object where data is Location object
           .map(location => {
             return {
               lat: parseInt(location.latitude),
-              lng: parseInt(location.longitude),
-              data: location
+              long: parseInt(location.longitude),
+              location: {
+                id: location.id,
+                name: location.name,
+                area: location.unitaryAuthArea
+              }
             }
           });
       })
