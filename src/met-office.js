@@ -21,11 +21,19 @@ class MetOffice {
   getWeather(postcode, apiKey) {
 
     this.getMetOfficeLocations() // A promise
-      .then((locations) => {
-        console.log(locations[0]);
-        return this.createTree(locations);
-      })
-      // .then(tree => console.log(tree));
+      .then((locations) => this.createTree(locations))
+      .then(
+        // Get nearest location from tree
+      )
+      .then(
+        // Get weather forecast for nearest location
+      )
+      .then(
+        // Format weather forecast
+      )
+      .then(
+        // Return it via res as JSON
+      )
 
   };
 
