@@ -1,5 +1,5 @@
 var express = require("express");
-var WeatherAPI = require("../src/weather-api");
+var WeatherAPI = require('../src/weather-api').WeatherAPI;
 
 var router = express.Router();
 
@@ -10,7 +10,8 @@ var router = express.Router();
  */
 router.get('/:postcode', function (req, res, next) {
 
-    WeatherAPI.getWeather();
+    const wa = new WeatherAPI();
+    wa.getWeather();
 
     res.send({
         forecast: 'Some JSON here'

@@ -1,11 +1,16 @@
-const rp = require('request-promise');
+const MetOffice = require('./met-office').MetOffice;
 
 class WeatherAPI {
 
-    static getWeather() {
-        console.log("Weather");
+    constructor() {};
+
+    getWeather() {
+
+        const mo = new MetOffice();
+        mo.getWeather('POSTCODE', 'APIKEY');
+
     }
 
 }
 
-module.exports = WeatherAPI;
+exports.WeatherAPI = WeatherAPI;
