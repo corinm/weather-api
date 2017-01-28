@@ -26,9 +26,14 @@ class MetOffice {
     this._optionsTreeCreate = {
       method: 'POST',
       uri: process.env.TREE_API_URL + '/tree/create',
-      body: {
-        locations: []
-      },
+      body: {},
+      json: true
+    };
+
+    this._optionsTreeSearch = {
+      method: 'POST',
+      uri: process.env.TREE_API_URL + '/tree/search',
+      body: {},
       json: true
     };
 
@@ -36,21 +41,27 @@ class MetOffice {
     this._metLocations = [];
   };
 
+
+  /**
+   * Given a postcode and Met Office API, obtains weather forecast
+   * @param {string} postcode - User's postcode
+   * @param {string} apiKey - Met Office API Key
+   */
   getWeather(postcode, apiKey) {
 
     this.getMetOfficeLocations() // A promise
       .then((locations) => {
-        // Create tree
         this.createTree(locations)
           .then((idOfTree) => {
-            console.log("Tree created");
-            console.log(idOfTree);
-
-            // TODO: Query tree
+            this.searchTree(idOfTree, postcode)
+              .then((closestLocation) => {
+                console.log(closestLocation);
+              });
           });
 
       })
   };
+
 
   /*
    * Returns Promise of an array of Met Office weather locations
@@ -98,6 +109,31 @@ class MetOffice {
   };
 
   /*
+   * Given a postcode and tree id, returns closest location for a weather report
+   */
+  searchTree(id, postcode) {
+    let myLatLong = this.getMyLatLong(postcode)
+      .then((latLong) => {
+        return {
+          key1: latLong.latitude,
+          key2: latLong.longitude
+        }
+      })
+      .then((key) => {
+        let optionsTreeSearch = this._optionsTreeSearch;
+        optionsTreeSearch.body = {
+          treeId: id,
+          key: key
+        };
+
+        return rp(optionsTreeSearch)
+          .then((response) => {
+            return response;
+          });
+      });
+  };
+
+  /*
    * Accepts a postcode, returns lat and long as an object
    */
   getMyLatLong(postcode) {
@@ -108,12 +144,10 @@ class MetOffice {
         return response.result[0];
       })
       .then((location) => {
-        let a = {
-          lat: parseInt(location.latitude),
-          lng: parseInt(location.longitude)
+        return {
+          latitude: parseFloat(location.latitude),
+          longitude: parseFloat(location.longitude)
         }
-        // console.log(a);
-        return a;
       });
   };
 
