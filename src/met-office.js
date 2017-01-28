@@ -75,8 +75,8 @@ class MetOffice {
           // Convert into GeoTree object where data is Location object
           .map(location => {
             return {
-              key1: parseInt(location.latitude),
-              key2: parseInt(location.longitude),
+              key1: parseFloat(location.latitude),
+              key2: parseFloat(location.longitude),
               data: {
                 id: location.id,
                 name: location.name,
