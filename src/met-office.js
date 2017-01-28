@@ -52,8 +52,10 @@ class MetOffice {
     this.getMetOfficeLocations() // A promise
       .then((locations) => {
         this.createTree(locations)
-          .then((idOfTree) => {
-            this.searchTree(idOfTree, postcode)
+          .then((idAndSecret) => {
+            let id = idAndSecret.id;
+            let secret = idAndSecret.secret;
+            this.searchTree(id, secret, postcode)
               .then((closestLocation) => {
                 console.log(closestLocation);
               });
@@ -101,7 +103,10 @@ class MetOffice {
 
     return rp(optionsTreeCreate)
       .then((response) => {
-        return response.id;
+        return {
+          id: response.id,
+          secret: response.secret
+        }
       })
       .catch(function (err) {
         console.error(err);
@@ -111,7 +116,7 @@ class MetOffice {
   /*
    * Given a postcode and tree id, returns closest location for a weather report
    */
-  searchTree(id, postcode) {
+  searchTree(id, secret, postcode) {
     return this.getMyLatLong(postcode)
       .then((latLong) => {
         return {
@@ -122,7 +127,8 @@ class MetOffice {
       .then((key) => {
         let optionsTreeSearch = this._optionsTreeSearch;
         optionsTreeSearch.body = {
-          treeId: id,
+          id: id,
+          secret: secret,
           key: key
         };
 
