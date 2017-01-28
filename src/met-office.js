@@ -6,7 +6,7 @@ var GeoTree = require('geo-tree');
 class MetOffice {
 
   constructor() {
-    // Met Office locations request - options object
+    // Options for requesting all Met Office locations
     this._optionsLocationRequest = {
       uri: 'http://datapoint.metoffice.gov.uk/public/data/val/wxfcs/all/json/sitelist',
       qs: {
@@ -25,7 +25,7 @@ class MetOffice {
 
     this._optionsTreeCreate = {
       method: 'POST',
-      uri: 'https://aqueous-woodland-65525.herokuapp.com/tree/create',
+      uri: process.env.TREE_API_URL + '/tree/create',
       body: {
         locations: []
       },
