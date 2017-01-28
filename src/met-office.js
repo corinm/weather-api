@@ -112,7 +112,7 @@ class MetOffice {
    * Given a postcode and tree id, returns closest location for a weather report
    */
   searchTree(id, postcode) {
-    let myLatLong = this.getMyLatLong(postcode)
+    return this.getMyLatLong(postcode)
       .then((latLong) => {
         return {
           key1: latLong.latitude,
