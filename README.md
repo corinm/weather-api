@@ -47,7 +47,29 @@ On success will return JSON representing the weather forecast
   }
 }
 ```
-
+Understanding the output:  
+* `forecast` (object) - contains all returned data
+  * `location` (string) - location of forecast
+  * `metId` (string) - Met Office's id for weather station that provided the forecast
+  * `forecasts` (array) - contains forecast data by day
+    * `date` (string) - date for each day's forecast
+    * `tempList` (array) - forecast data for each day
+      * `hours` (number) - time of forecast expressed as integer, e.g. midnight = 0, 3am = 3, 3pm = 15
+      * `time` (string) - time expressed in readable format e.g. 'Midnight', '3pm'
+      * `windDirection` (string) - wind direction e.g. N, SW, NNW
+      * `tempFeelsLike` (string) - feels like temperature in celsius
+      * `windGust` (string) - wind speed of gusts in mph
+      * `relHumidity` (string) - relative humidity
+      * `precipitationProb` (string) - propability of precipitation
+      * `windSpeed` (string) - overall wind speed in mph
+      * `temp` (string) - temperature in celsius
+      * `uv` (string) - uv index
+      * `visibility` (string) - visibility code
+      * `weatherType` (number) - weather type code (for use in other apps)
+      * `weatherTypeFull` (string) - weather type description (for use in other apps)
+      * `weatherTypeSimple` (number) - weather type code simple (for use in other apps)
+      * `color` (string) - hex code for colour coding weather type (background colour)
+      * `textColor` (string) - hex code for colour coding weather type (text colour)
 
 ## Running Locally
 
