@@ -8,9 +8,9 @@ var router = express.Router();
 /**
  * Requires a UK Postcode, responds with 2-day weather forecast in JSON format
  */
-router.get('/:postcode', function (req, res, next) {
+router.get('/weather', function (req, res, next) {
 
-  let postcode = 'L2 3PS';
+  let postcode = req.query.postcode;
 
   const wa = new WeatherAPI();
   wa.getWeather(postcode, (result) => {
