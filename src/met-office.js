@@ -1,7 +1,7 @@
 const Promise = require('promise');
 const rp = require('request-promise');
 const Location = require('./location').Location;
-var GeoTree = require('geo-tree');
+const JsonProcessor = require('./json-processor').JsonProcessor;
 
 class MetOffice {
 
@@ -37,6 +37,15 @@ class MetOffice {
       json: true
     };
 
+    this._optionsForecastRequest = {
+      uri: 'http://datapoint.metoffice.gov.uk/public/data/val/wxfcs/all/json/',
+      qs: {
+        res: '3hourly',
+        key: process.env.MET_KEY
+      },
+      json: true
+    };
+
     // Blank array of Met Office locations
     this._metLocations = [];
   };
@@ -47,17 +56,22 @@ class MetOffice {
    * @param {string} postcode - User's postcode
    * @param {string} apiKey - Met Office API Key
    */
-  getWeather(postcode, apiKey) {
+  getWeather(postcode, apiKey, callback) {
 
-    this.getMetOfficeLocations() // A promise
+    return this.getMetOfficeLocations() // A promise
       .then((locations) => {
         this.createTree(locations)
           .then((idAndSecret) => {
-            let id = idAndSecret.id;
-            let secret = idAndSecret.secret;
-            this.searchTree(id, secret, postcode)
+            this.searchTree(idAndSecret.id, idAndSecret.secret, postcode)
               .then((closestLocation) => {
-                console.log(closestLocation);
+                this.getForecasts(closestLocation.id)
+                  .then((forecastsAll) => {
+                    console.log(forecastsAll);
+                    callback(forecastsAll);
+                    return forecastsAll; // TODO: Need to return this only when ready
+                  });
+
+
               });
           });
 
@@ -138,6 +152,24 @@ class MetOffice {
           });
       });
   };
+
+  /*
+   * Get forecasts for a given Met Office id
+   */
+  getForecasts(metLocationId) {
+
+    let optionsForecastRequest = this._optionsForecastRequest;
+    optionsForecastRequest.uri += metLocationId;
+    
+    return rp(optionsForecastRequest)
+      .then((response) => {
+        const jp = new JsonProcessor();
+        const json = jp.parseForecasts(response);
+        return json;
+      })
+
+  };
+
 
   /*
    * Accepts a postcode, returns lat and long as an object

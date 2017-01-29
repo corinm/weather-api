@@ -2,14 +2,18 @@ const MetOffice = require('./met-office').MetOffice;
 
 class WeatherAPI {
 
-    constructor() {};
+  constructor() {};
 
-    getWeather(postcode) {
+  getWeather(postcode, callback) {
 
-        const mo = new MetOffice();
-        mo.getWeather(postcode, 'APIKEY');
+    const mo = new MetOffice();
+    return mo.getWeather(postcode, 'APIKEY', callback)
+      .then((forecasts) => {
+        console.log(forecasts);
+        return forecasts;
+      });
 
-    }
+  }
 
 }
 
