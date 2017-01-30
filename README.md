@@ -1,6 +1,10 @@
 # weather-api
 
-An API providing a weather forecast in JSON format.
+A web service that provides weather forecasts for a given postcode.  
+* Obtains forecast data from [Met Office Datapoint](http://www.metoffice.gov.uk/datapoint).  
+* Uses my [kd-tree-api](https://github.com/corinm/kd-tree-api) to find nearest Met Office weather station.  
+* Converts postcodes to latitude and longitude using [Postcodes.io](http://postcodes.io/).  
+* Returns forecast in custom format using JSON, for use in other applications.  
 
 ## API Documentation
 ### Get weather forecasts
@@ -85,5 +89,5 @@ Understanding the output:
 3. Run `heroku open`  
 
 ## Attributions
-  * Weather data obtained from the (Met Office Datapoint)[http://www.metoffice.gov.uk/datapoint]
-  * Postcode look-up uses (Postcodes.io)[http://postcodes.io/]
+  * Weather data obtained from the [Met Office Datapoint](http://www.metoffice.gov.uk/datapoint)
+  * Postcode look-up uses [Postcodes.io](http://postcodes.io/)
