@@ -116,11 +116,7 @@ class WeatherConverter {
         }
         break;
       case 2:
-        if (temp >= 18) {
-          simple = this.weatherSimple.SUNNY_HOT;
-        } else {
-          simple = this.weatherSimple.SUNNY_COLD;
-        }
+        simple = this.weatherSimple.CLEAR_NIGHT;
         break;
       case 3:
         if (temp >= 18) {
